@@ -8,9 +8,15 @@ class Config:
 
     def __init__(self, client_id = '', client_secret = '', redirect_uri = ''):
         self.loadConfig()
-        self.__configDict['client_id'] = client_id
-        self.__configDict['client_secret'] = client_secret
-        self.__configDict['redirect_uri'] = redirect_uri
+        if not 'client_id' in self.__configDict.keys():
+            self.__configDict['client_id'] = input('client_id: ')
+
+        if not 'client_secret' in self.__configDict.keys():
+            self.__configDict['client_secret'] = input('client_secret: ')
+
+        if not 'redirect_uri' in self.__configDict.keys():
+            self.__configDict['redirect_uri'] = input('redirect_uri: ')        
+
         self.saveConfig()
 
     def loadConfig(self):
@@ -52,7 +58,7 @@ if len(sys.argv) > 1:
 else:
     print("Usage: %s username" % (sys.argv[0],))
     sys.exit()
-config = Config("client_id","client_secret","http://localhost:8080")
+config = Config()
 token = util.prompt_for_user_token(username, scope,client_id=config.get_client_id(),client_secret=config.get_client_secret(),redirect_uri=config.get_redirect_uri())
 
 if token:
