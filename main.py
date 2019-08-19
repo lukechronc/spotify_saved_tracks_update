@@ -45,7 +45,6 @@ class Config:
         self.__configDict['redirect_uri'] = redirect_uri
         self.saveConfig()
     
-    
 scope = 'user-library-read,user-top-read,playlist-modify-public,playlist-modify-private'
 playlist_name = 'Current Saved Tracks'
 if len(sys.argv) > 1:
