@@ -52,7 +52,7 @@ if len(sys.argv) > 1:
 else:
     print("Usage: %s username" % (sys.argv[0],))
     sys.exit()
-config = Config("63f99ecee59848aaa9926cb4495d8f52","965adb5dd9c04282bb4456499ba94f13","http://localhost:8080")
+config = Config("client_id","client_secret","http://localhost:8080")
 token = util.prompt_for_user_token(username, scope,client_id=config.get_client_id(),client_secret=config.get_client_secret(),redirect_uri=config.get_redirect_uri())
 
 if token:
