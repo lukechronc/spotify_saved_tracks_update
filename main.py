@@ -1,18 +1,65 @@
 import sys
 import spotipy
 import spotipy.util as util
-import subprocess
+import os.path
+import json
+class Config:
+    __configDict = {}
 
+    def __init__(self, client_id = '', client_secret = '', redirect_uri = ''):
+        self.loadConfig()
+        if not 'client_id' in self.__configDict.keys():
+            self.__configDict['client_id'] = input('client_id: ')
+
+        if not 'client_secret' in self.__configDict.keys():
+            self.__configDict['client_secret'] = input('client_secret: ')
+
+        if not 'redirect_uri' in self.__configDict.keys():
+            self.__configDict['redirect_uri'] = input('redirect_uri: ')        
+
+        self.saveConfig()
+
+    def loadConfig(self):
+        if os.path.isfile("config.json"):
+            f = open("config.json", "r")
+            self.__configDict = json.loads(f.read())
+            f.close
+
+    def saveConfig(self):
+        f = open("config.json", "w+")
+        f.write(json.dumps(self.__configDict))
+        f.close()
+
+    def get_client_id(self):
+        return self.__configDict.get('client_id')
+
+    def set_client_id(self, client_id):
+        self.__configDict['client_id'] = client_id
+        self.saveConfig()
+    
+    def get_client_secret(self):
+        return self.__configDict.get('client_secret')
+
+    def set_client_secret(self, client_secret):
+        self.__configDict['client_secret'] = client_secret
+        self.saveConfig()
+    
+    def get_redirect_uri(self):
+        return self.__configDict.get('redirect_uri')
+
+    def set_redirect_uri(self, redirect_uri):
+        self.__configDict['redirect_uri'] = redirect_uri
+        self.saveConfig()
+    
 scope = 'user-library-read,user-top-read,playlist-modify-public,playlist-modify-private'
 playlist_name = 'Current Saved Tracks'
-subprocess.call("./setEnvVar.sh", shell=True)
 if len(sys.argv) > 1:
     username = sys.argv[1]
 else:
     print("Usage: %s username" % (sys.argv[0],))
     sys.exit()
-
-token = util.prompt_for_user_token(username, scope)
+config = Config()
+token = util.prompt_for_user_token(username, scope,client_id=config.get_client_id(),client_secret=config.get_client_secret(),redirect_uri=config.get_redirect_uri())
 
 if token:
     sp = spotipy.Spotify(auth=token)
@@ -31,3 +78,7 @@ if token:
 
 else:
     print("Can't get token for", username)
+
+
+    
+            
