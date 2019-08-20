@@ -24,6 +24,9 @@ class Config:
             f = open("config.json", "r")
             self.__configDict = json.loads(f.read())
             f.close
+        else:
+            f = open("config.json", "w+")
+            f.close()
 
     def saveConfig(self):
         f = open("config.json", "w+")
